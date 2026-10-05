@@ -1,0 +1,48 @@
+name: Build Group 5
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message for manually triggering'
+        required: false
+        default: 'Triggered for Updates'
+        type: string
+
+jobs:
+  build-maven-registration:
+    uses: iiitb-pilot/kattu/.github/workflows/maven-build.yml@master-java21
+    with:
+      SERVICE_LOCATION: ./registration-processor
+      BUILD_ARTIFACT: registration
+    secrets:
+      OSSRH_USER: ${{ secrets.OSSRH_USER }}
+      OSSRH_SECRET: ${{ secrets.OSSRH_SECRET }}
+      OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+      GPG_SECRET: ${{ secrets.GPG_SECRET }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  build-dockers:
+    needs: build-maven-registration
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - SERVICE_LOCATION: 'registration-processor/stage-groups/registration-processor-stage-group-5'
+            SERVICE_NAME: 'registration-processor-stage-group-5'
+            BUILD_ARTIFACT: 'registration'
+
+    name: ${{ matrix.SERVICE_NAME }}
+
+    uses: iiitb-pilot/kattu/.github/workflows/docker-build.yml@master-java21
+
+    with:
+      SERVICE_LOCATION: ${{ matrix.SERVICE_LOCATION }}
+      SERVICE_NAME: ${{ matrix.SERVICE_NAME }}
+      BUILD_ARTIFACT: ${{ matrix.BUILD_ARTIFACT || false }}
+
+    secrets:
+      DEV_NAMESPACE_DOCKER_HUB: ${{ secrets.DEV_NAMESPACE_DOCKER_HUB }}
+      ACTOR_DOCKER_HUB: ${{ secrets.ACTOR_DOCKER_HUB }}
+      RELEASE_DOCKER_HUB: ${{ secrets.RELEASE_DOCKER_HUB }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
