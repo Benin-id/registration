@@ -16,7 +16,6 @@
 	</properties>
 
 	<dependencies>
-	
 		<!-- Stage Executor -->
 		<dependency>
 			<groupId>io.mosip.registrationprocessor</groupId>
@@ -33,11 +32,6 @@
 		<dependency>
 			<groupId>io.mosip.registrationprocessor</groupId>
 			<artifactId>registration-processor-packet-classifier-stage</artifactId>
-			<version>1.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.mosip.registrationprocessor</groupId>
-			<artifactId>registration-processor-verification-stage</artifactId>
 			<version>1.3.0</version>
 		</dependency>
 		
