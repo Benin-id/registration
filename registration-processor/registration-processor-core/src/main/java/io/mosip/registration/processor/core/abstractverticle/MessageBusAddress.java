@@ -250,6 +250,12 @@ public class MessageBusAddress implements Serializable {
 	/** The Constant STRUCTURE_BUS_OUT. */
 	public static final MessageBusAddress PACKET_CLASSIFIER_BUS_OUT = new MessageBusAddress("packet-classifier-bus-out");
 
+    /** The Constant for CustomRegProcStage's inbound messages. */
+    public static final MessageBusAddress TRANSFORMER_STAGE_BUS_IN = new MessageBusAddress("transformer-stage-bus-in");
+
+    /** The Constant for CustomRegProcStage's outbound messages. */
+    public static final MessageBusAddress TRANSFORMER_STAGE_BUS_OUT = new MessageBusAddress("transformer-stage-bus-out");
+
 	/** The Constant WORKFLOW_INTERNAL_ACTION_ADDRESS. */
 	public static final MessageBusAddress WORKFLOW_INTERNAL_ACTION_ADDRESS = new MessageBusAddress(
 			"workflow-internal-action");
