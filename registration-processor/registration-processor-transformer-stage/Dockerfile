@@ -1,10 +1,15 @@
+
 FROM eclipse-temurin:21-jre-alpine
 
 ARG SOURCE
 ARG COMMIT_HASH
 ARG COMMIT_ID
 ARG BUILD_TIME
-LABEL source="${SOURCE}" commit_hash="${COMMIT_HASH}" commit_id="${COMMIT_ID}" build_time="${BUILD_TIME}"
+
+LABEL source=${SOURCE}
+LABEL commit_hash=${COMMIT_HASH}
+LABEL commit_id=${COMMIT_ID}
+LABEL build_time=${BUILD_TIME}
 
 ARG spring_config_label
 ARG active_profile
@@ -35,11 +40,12 @@ RUN apk add --no-cache ca-certificates wget fontconfig ttf-dejavu \
 
 WORKDIR /home/${container_user}
 
-# This must be a runnable executable JAR containing its runtime dependencies.
+# Runnable Spring Boot JAR containing runtime dependencies
 COPY --chown=1002:1001 ./target/registration-processor-transformer-stage-1.3.0.jar ./registration-processor-transformer-stage.jar
 
 VOLUME ["/home/mosip/logs", "/home/mosip/Glowroot"]
+
 USER ${container_user_uid}:${container_user_gid}
 
-# Optional IAM adapter download; fail on download errors instead of silently starting.
+# Download optional IAM adapter and start Transformer Stage
 CMD ["sh", "-c", "if [ -n \"$iam_adapter_url_env\" ]; then wget -q \"$iam_adapter_url_env\" -O \"$loader_path_env/kernel-auth-adapter.jar\" || exit 1; fi; exec java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dloader.path=\"$loader_path_env\" -Dspring.cloud.config.label=\"$spring_config_label_env\" -Dspring.profiles.active=\"$active_profile_env\" -Dspring.cloud.config.uri=\"$spring_config_url_env\" -jar registration-processor-transformer-stage.jar"]
