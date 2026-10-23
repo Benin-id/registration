@@ -32,7 +32,7 @@ ARG container_user_group=mosip
 ARG container_user_uid=1002
 ARG container_user_gid=1001
 
-RUN apk add --no-cache ca-certificates wget fontconfig ttf-dejavu \
+RUN apk add --no-cache ca-certificates wget fontconfig ttf-dejavu libstdc++ libgcc \
     && addgroup -g "${container_user_gid}" "${container_user_group}" \
     && adduser -D -u "${container_user_uid}" -G "${container_user_group}" -h "/home/${container_user}" "${container_user}" \
     && mkdir -p /home/${container_user}/additional_jars /home/${container_user}/logs /home/${container_user}/Glowroot \
