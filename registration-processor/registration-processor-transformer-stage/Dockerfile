@@ -1,5 +1,4 @@
-
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre-jammy
 
 ARG SOURCE
 ARG COMMIT_HASH
@@ -32,9 +31,14 @@ ARG container_user_group=mosip
 ARG container_user_uid=1002
 ARG container_user_gid=1001
 
-RUN apk add --no-cache ca-certificates wget fontconfig ttf-dejavu libstdc++ libgcc \
-    && addgroup -g "${container_user_gid}" "${container_user_group}" \
-    && adduser -D -u "${container_user_uid}" -G "${container_user_group}" -h "/home/${container_user}" "${container_user}" \
+# glibc-based image + native libs required by OpenCV (libstdc++6, libgomp1)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       ca-certificates wget fontconfig fonts-dejavu-core \
+       libstdc++6 libgomp1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -g "${container_user_gid}" "${container_user_group}" \
+    && useradd -m -u "${container_user_uid}" -g "${container_user_group}" -d "/home/${container_user}" -s /bin/sh "${container_user}" \
     && mkdir -p /home/${container_user}/additional_jars /home/${container_user}/logs /home/${container_user}/Glowroot \
     && chown -R "${container_user_uid}:${container_user_gid}" "/home/${container_user}"
 
