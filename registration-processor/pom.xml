@@ -111,7 +111,7 @@
 
 		<!-- jsch.version -->
 		<jsch.version>0.1.55</jsch.version>
-		
+
 		<zipkin.version>3.3.0</zipkin.version>
 		<activemq.client.version>6.1.2</activemq.client.version>
 
@@ -336,6 +336,12 @@
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-web</artifactId>
+                <version>3.9.13</version>
+                <scope>compile</scope>
+            </dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
@@ -379,7 +385,8 @@
 		<module>stage-groups</module>
         <module>workflow-engine</module>
         <module>registration-processor-landing-zone</module>
-  </modules>
+        <module>registration-processor-transformer-stage</module>
+    </modules>
 	<build>
 			<pluginManagement>
 				<plugins>
@@ -399,12 +406,12 @@
 						<skipTests>${skipTests}</skipTests>
 						<skip>false</skip>
 						<argLine>
-							${argLine} --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED 
-							--add-opens java.base/java.lang=ALL-UNNAMED 
-							--add-opens java.base/java.net=ALL-UNNAMED 
-							--add-opens java.base/java.util=ALL-UNNAMED 
-							--add-opens java.base/java.io=ALL-UNNAMED 
-							--add-opens java.base/java.time=ALL-UNNAMED 
+							${argLine} --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
+							--add-opens java.base/java.lang=ALL-UNNAMED
+							--add-opens java.base/java.net=ALL-UNNAMED
+							--add-opens java.base/java.util=ALL-UNNAMED
+							--add-opens java.base/java.io=ALL-UNNAMED
+							--add-opens java.base/java.time=ALL-UNNAMED
 							--add-opens java.base/java.nio.charset=ALL-UNNAMED
 							--add-opens java.base/java.time.format=ALL-UNNAMED
 							--add-opens java.base/java.lang.reflect=ALL-UNNAMED
@@ -413,7 +420,7 @@
 							--add-opens java.base/jdk.internal.util=ALL-UNNAMED
 							--add-opens java.base/java.text=ALL-UNNAMED
 							--add-opens java.base/java.util.concurrent=ALL-UNNAMED
-							--add-opens java.xml/com.sun.org.apache.xerces.internal.impl=ALL-UNNAMED 
+							--add-opens java.xml/com.sun.org.apache.xerces.internal.impl=ALL-UNNAMED
 							--illegal-access=permit
 						</argLine>
 					</configuration>
@@ -540,7 +547,7 @@
 						</archive>
 					</configuration>
 				</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven.javadoc.version}</version>
@@ -548,7 +555,24 @@
 					<aggregate>true</aggregate>
 					<doclint>none</doclint>
 				</configuration>
-			</plugin>
+			</plugin>-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven.javadoc.version}</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <doclint>none</doclint>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 				<plugin>
 					<groupId>org.sonatype.central</groupId>
 					<artifactId>central-publishing-maven-plugin</artifactId>
@@ -572,7 +596,7 @@
                         </execution>
                   </executions>
                 </plugin>
-                <plugin>
+                <!--<plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-javadoc-plugin</artifactId>
                   <version>3.2.0</version>
@@ -587,7 +611,7 @@
                   <configuration>
                      <doclint>none</doclint>
                   </configuration>
-                </plugin>
+                </plugin>-->
 		</plugins>
 	</build>
 	<profiles>
